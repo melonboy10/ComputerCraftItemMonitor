@@ -142,7 +142,7 @@ function Node:updateScreen()
 
         Computer.monitor:drawGraph(2, Computer.monitor.height - 15, width, Computer.monitor.height - 17, data, self.maxItemCount)
 
-        if (Computer.monitor.height > 6) then
+        if (Computer.monitor.height > 10) then
             Computer.monitor:fill(1, Computer.monitor.height - 10, 17, Computer.monitor.height, color)
         end
     end

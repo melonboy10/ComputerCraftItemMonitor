@@ -65,7 +65,10 @@ function Hub:updateScreen()
     if (self.screen == HubScreens.GRID) then
         local i = 0
         for nodeID, node in pairs(self.nodes) do
-            Computer.monitor:drawNodeSquare(node, 3 + 13 * i, math.floor(i / 4) * 7 + 7)
+            if (node ~= nil) then
+                Computer.monitor:drawNodeSquare(node, i % 4 * 13 + 3, math.floor(i / 4) * 7 + 7)
+                i = i + 1
+            end
         end
         -- Computer.monitor:drawNodeSquare({ }, 3, 7)
         -- Computer.monitor:drawNodeSquare({ }, 16, 7)

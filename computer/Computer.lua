@@ -58,9 +58,11 @@ function Computer.start()
             if (Computer.info.computerType == ComputerType.HUB) then
                 -- print(x)
                 local nodeTableThing = textutils.unserialise(x)
-                -- print(textutils.serialise(nodeTableThing))
-                Computer.system.nodes[nodeTableThing.nodeID] = nodeTableThing;
-                Computer.system:update()
+                if (nodeTableThing ~= nil) then
+                    print(textutils.serialise(nodeTableThing))
+                    Computer.system.nodes[nodeTableThing.nodeID] = nodeTableThing;
+                    Computer.system:update()
+                end
             end
         elseif (event == "terminate") then
             Computer.monitor.monitor.clear()
@@ -110,7 +112,7 @@ function Computer.setUpNode()
         Computer.system:save()
     else
         nodeTable = textutils.unserialise(nodeTable)
-        Computer.system = Node(nodeTable.name, nodeTable.id, nodeTable.nodeHistory.quantityHistory, nodeTable.nodeHistory.trend)
+        Computer.system = Node(nodeTable.name, nodeTable.nodeID, nodeTable.nodeHistory.quantityHistory, nodeTable.nodeHistory.trend)
     end
 
     Computer.info.computerType = ComputerType.NODE
