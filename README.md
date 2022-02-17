@@ -5,7 +5,7 @@ Seedless Item Monitor is an item monitoring system (duh) made with ComputerCraft
 Copy the pastbin command below and run it to start the installer.
 If the computer has a `startup.lua` file already present then it will be overwritten so it is recomended to use a fresh computer.
 
-`pastebin run 298376482976349238649`
+[`pastebin run 4Nfqj9zJ`](https://pastebin.com/4Nfqj9zJ)
 
 This will install the full system, just restart the computer to setup the computer.
 
