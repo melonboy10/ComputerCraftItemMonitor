@@ -1,8 +1,8 @@
-local FileManager = require("computer.FileManager")
-local NodeHistory = require("node.NodeHistory")
-local Node        = require("node.Node")
-local Hub         = require("hub.Hub")
-local Monitor     = require("computer.Monitor")
+local FileManager = require("seedless.computer.FileManager")
+local NodeHistory = require("seedless.node.NodeHistory")
+local Node        = require("seedless.node.Node")
+local Hub         = require("seedless.hub.Hub")
+local Monitor     = require("seedless.computer.Monitor")
 
 local os        = _G.os
 local term      = _G.term

@@ -1,5 +1,5 @@
-local class = require("util.class")
-local Util  = require("util.Util")
+local class = require("seedless.util.class")
+local Util  = require("seedless.util.Util")
 
 local NodeHistory = class()
 

@@ -1,6 +1,6 @@
-local class       = require('util.class')
-local FileManager = require('computer.FileManager')
-local Collection  = require('hub.Collection')
+local class       = require('seedless.util.class')
+local FileManager = require('seedless.computer.FileManager')
+local Collection  = require('seedless.hub.Collection')
 
 local os          = _G.os
 

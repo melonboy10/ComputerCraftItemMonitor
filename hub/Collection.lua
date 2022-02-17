@@ -1,4 +1,4 @@
-local class = require("util.class")
+local class = require("seedless.util.class")
 
 local Collection = class()
 
