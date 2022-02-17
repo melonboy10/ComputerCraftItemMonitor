@@ -1,4 +1,0 @@
-{
-  computerType = "hub",
-  updateTime = 10,
-}
