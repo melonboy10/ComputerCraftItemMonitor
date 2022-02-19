@@ -10,6 +10,8 @@ HubScreens = { GRID = "grid", COLLECTION = "collection", LIST = "list"}
 function Hub:init(name, collections)
     self.name = name
     self.screen = HubScreens.GRID
+    self.scroll = 0;
+    self.scrollMax = 1;
 
     self.collections = { }
     for i = 1, #collections do
@@ -21,6 +23,16 @@ function Hub:init(name, collections)
 end
 
 function Hub:update()
+    local length = Util.tablelength(self.nodes)
+    print(length)
+    if (length > 1) then
+        if (self.screen == HubScreens.GRID) then
+            self.scrollMax = math.floor(length / 4)
+        elseif (self.screen == HubScreens.LIST) then
+            self.scrollMax = math.floor(length / 3)
+        end
+    end
+
     self:updateScreen()
 
     if (os.clock() % Computer.info.updateTime == 0) then
@@ -28,7 +40,20 @@ function Hub:update()
     end
 end
 
-function Hub:touchEvent()
+function Hub:touchEvent(event, button, x, y)
+    if (self.screen == HubScreens.GRID or self.screen == HubScreens.LIST) then
+        if (x == 2) then
+            if (y == 7) then
+                self.scroll = self.scroll - 1
+                self.scroll = math.max(self.scroll, 0)
+            elseif (y == 23) then
+                self.scroll = self.scroll + 1
+                self.scroll = math.min(self.scroll, self.scrollMax)
+            end
+        end
+    end
+    print(self.scrollMax)
+
     self:update()
 end
 
@@ -57,6 +82,14 @@ function Hub:updateScreen()
         Computer.monitor.monitor.setCursorPos(11, 4)
         Computer.monitor.monitor.write("View")
 
+        Computer.monitor.monitor.setCursorPos(2, 7)
+        Computer.monitor.monitor.write("\24")
+        Computer.monitor.monitor.setCursorPos(2, 23)
+        Computer.monitor.monitor.write("\25")
+
+        print(self.scroll .. ", " .. self.scrollMax)
+        Computer.monitor:drawVProgressBar(2, 8, 22, self.scroll, self.scrollMax)
+
         Computer.monitor:xLine(6, colors.gray, true, "\131")
     end
 
@@ -64,18 +97,19 @@ function Hub:updateScreen()
 
     if (self.screen == HubScreens.GRID) then
         local i = 0
+        local j = 0
         for nodeID, node in pairs(self.nodes) do
             if (node ~= nil) then
-                Computer.monitor:drawNodeSquare(node, i % 4 * 13 + 3, math.floor(i / 4) * 7 + 7)
-                i = i + 1
+                if (j >= self.scroll * 4) then
+                    Computer.monitor:drawNodeSquare(node, i % 4 * 13 + 3, math.floor(i / 4) * 7 + 8)
+                    i = i + 1
+                    if (i > 7) then
+                        break
+                    end
+                end
+                j = j + 1
             end
         end
-        -- Computer.monitor:drawNodeSquare({ }, 3, 7)
-        -- Computer.monitor:drawNodeSquare({ }, 16, 7)
-        -- Computer.monitor:drawNodeSquare({ }, 29, 7)
-        -- Computer.monitor:drawNodeSquare({ }, 42, 7)
-        -- Computer.monitor:drawNodeSquare({ }, 3, 7)
-        -- Computer.monitor:drawNodeSquare({ }, 3, 7)
     elseif (self.screen == HubScreens.LIST) then
 
     elseif (self.screen == HubScreens.COLLECTION) then

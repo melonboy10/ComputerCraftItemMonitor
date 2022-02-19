@@ -47,11 +47,11 @@ function Computer.start()
         if (event == "timer") then
             Computer.newTimer = true
             os.cancelTimer(Computer.timer)
-            if (Computer.system ~= nil) then Computer.system:update() end
             Computer.drawGUI()
+            Computer.save()
         elseif (event == "monitor_touch") then
             Computer.touchEvent(event, button, x, y)
-            Computer.system:touchEvent(event, button, x, y)
+            if (Computer.system ~= nil) then Computer.system:touchEvent(event, button, x, y) end
         elseif (event == "mouse_click") then
             Computer.touchEvent(event, button, x, y)
         elseif (event == "rednet_message") then
@@ -59,7 +59,7 @@ function Computer.start()
                 -- print(x)
                 local nodeTableThing = textutils.unserialise(x)
                 if (nodeTableThing ~= nil) then
-                    print(textutils.serialise(nodeTableThing))
+                    -- print(textutils.serialise(nodeTableThing))
                     Computer.system.nodes[nodeTableThing.nodeID] = nodeTableThing;
                     Computer.system:update()
                 end

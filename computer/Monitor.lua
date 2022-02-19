@@ -190,7 +190,7 @@ function Monitor:drawNodeSquare(node, x, y)
     local str = string.sub(node.itemID, string.find(node.itemID, ":") + 1, -1)
     str = str:gsub("_+", " ")
     str = str:gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end)
-    str = string.sub(str, 1, 15)
+    str = string.sub(str, 1, 12)
     self.monitor.write(str)
 
     -- self:writeQuantity(node.itemCount, node.maxItemCount, x + 1, y + 5)
@@ -202,6 +202,21 @@ function Monitor:drawNodeSquare(node, x, y)
 end
 
 function Monitor:drawNodeLine(node, x, y)
+end
+
+function Monitor:drawVProgressBar(x, y1, y2, progress, max)
+    self.monitor.setBackgroundColor(colors.black)
+    self.monitor.setTextColor(colors.white)
+    local pTm = progress / max
+    local y12 = y2 - y1
+    for i = 0, y12 do
+        self.monitor.setCursorPos(x, y1 + i)
+        if (i / y12 <= pTm) then
+            self.monitor.write("\149")
+        else
+            self.monitor.write("|")
+        end
+    end
 end
 
 return Monitor
