@@ -24,12 +24,11 @@ end
 
 function Hub:update()
     local length = Util.tablelength(self.nodes)
-    print(length)
     if (length > 1) then
         if (self.screen == HubScreens.GRID) then
-            self.scrollMax = math.floor(length / 4)
+            self.scrollMax = math.floor(length / 4) - 1
         elseif (self.screen == HubScreens.LIST) then
-            self.scrollMax = math.floor(length / 3)
+            self.scrollMax = math.floor(length) - 1
         end
     end
 
@@ -42,17 +41,26 @@ end
 
 function Hub:touchEvent(event, button, x, y)
     if (self.screen == HubScreens.GRID or self.screen == HubScreens.LIST) then
-        if (x == 2) then
-            if (y == 7) then
+        if (Util.isIn(x, y, 2, 7, 3, 23)) then
+            if (y < 15) then
                 self.scroll = self.scroll - 1
                 self.scroll = math.max(self.scroll, 0)
-            elseif (y == 23) then
+            else
                 self.scroll = self.scroll + 1
                 self.scroll = math.min(self.scroll, self.scrollMax)
             end
+        elseif (Util.isIn(x, y, 3, 3, 10, 4)) then
+            if (x <= 6) then
+                if (self.screen ~= HubScreens.GRID) then
+                    self.screen = HubScreens.GRID
+                end
+            else
+                if (self.screen ~= HubScreens.LIST) then
+                    self.screen = HubScreens.LIST
+                end
+            end
         end
     end
-    print(self.scrollMax)
 
     self:update()
 end
@@ -87,7 +95,6 @@ function Hub:updateScreen()
         Computer.monitor.monitor.setCursorPos(2, 23)
         Computer.monitor.monitor.write("\25")
 
-        print(self.scroll .. ", " .. self.scrollMax)
         Computer.monitor:drawVProgressBar(2, 8, 22, self.scroll, self.scrollMax)
 
         Computer.monitor:xLine(6, colors.gray, true, "\131")
@@ -111,7 +118,20 @@ function Hub:updateScreen()
             end
         end
     elseif (self.screen == HubScreens.LIST) then
-
+        local i = 0
+        local j = 0
+        for nodeID, node in pairs(self.nodes) do
+            if (node ~= nil) then
+                if (j >= self.scroll) then
+                    Computer.monitor:drawNodeLine(node, 3, i * 3 + 7)
+                    i = i + 1
+                    if (i > 4) then
+                        break
+                    end
+                end
+                j = j + 1
+            end
+        end
     elseif (self.screen == HubScreens.COLLECTION) then
 
     end

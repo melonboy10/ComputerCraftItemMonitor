@@ -65,7 +65,7 @@ function Util.drawIcon(place, x, y, isTextColor, char, image)
 end
 
 function Util.isIn(x, y, x1, y1, x2, y2)
-    return x > x1 and x < x2 and y > y1 and y < y2
+    return x >= x1 and x <= x2 and y >= y1 and y <= y2
 end
 
 function Util.firstToUpper(str)

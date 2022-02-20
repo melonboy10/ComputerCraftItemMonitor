@@ -202,6 +202,22 @@ function Monitor:drawNodeSquare(node, x, y)
 end
 
 function Monitor:drawNodeLine(node, x, y)
+    self:lineBorder(x, y, x + 52, y + 3, colors.lightGray)
+
+    self.monitor.setBackgroundColor(colors.black)
+    self.monitor.setTextColor(colors.white)
+    self.monitor.setCursorPos(x + 1, y + 1)
+    self.monitor.write(node.name)
+
+    self.monitor.setTextColor(colors.green)
+    self.monitor.setCursorPos(x + 1, y + 2)
+    local str = string.sub(node.itemID, string.find(node.itemID, ":") + 1, -1)
+    str = str:gsub("_+", " ")
+    str = str:gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end)
+    self.monitor.write(str)
+
+    self:writeQuantity(node.itemCount, node.maxItemCount, x + 21, y + 1)
+    self:writeTrend(node.nodeHistory.trend, x + 40, y + 1)
 end
 
 function Monitor:drawVProgressBar(x, y1, y2, progress, max)

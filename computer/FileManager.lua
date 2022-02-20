@@ -7,7 +7,6 @@ function FileManager.read(name)
     local file = fs.open("seedless/saves/" .. name .. ".txt", "r")
 
     if (file == nil) then
-        -- print("No File Found for " .. name)
         return nil
     else
         local lines = ""

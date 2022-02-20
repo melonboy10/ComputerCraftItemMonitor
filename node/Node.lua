@@ -27,14 +27,6 @@ function Node:init(name, id, quantityHistory, trend)
     self.blockID = ""
 
     self.nodeHistory = NodeHistory(self, quantityHistory, trend)
-
-    -- print(textutils.serialise( peripheral.getNames()))
-    -- for i, side in pairs(peripheral.getNames()) do
-    --     local type = peripheral.getType(side)
-    --     if (type == "inventory" or type == "blockReader" or type == "fluid_inventory") then
-    --         print (true)
-    --     end
-    -- end
 end
 
 function Node:readBlockData()
@@ -102,10 +94,6 @@ function Node:update()
     self:readBlockData()
     self.nodeHistory:update()
     self:updateScreen()
-
-    -- if (os.clock() % Computer.info.updateTime == 0) then
-        self:save()
-    -- end
 end
 
 function Node:touchEvent(event, button, x, y)
@@ -165,7 +153,6 @@ function Node:serialise()
 end
 
 function Node:save()
-    print("sav")
     local ser = self:serialise()
     FileManager.write("Node", ser)
     rednet.broadcast(textutils.serialise(ser))
