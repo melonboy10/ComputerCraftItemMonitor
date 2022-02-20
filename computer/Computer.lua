@@ -8,6 +8,7 @@ local os        = _G.os
 local term      = _G.term
 local textutils = _G.textutils
 
+local version = "0.4"
 Computer = { timer = 0 }
 ComputerType = { HUB = "hub", NODE = "node"}
 ComputerScreens = { SETUP = "setup", STATS = "stats" }
@@ -145,7 +146,7 @@ function Computer.drawGUI()
 
     paintutils.drawBox(1, 1, w, h, colors.green)
     term.setCursorPos(1, 1)
-    term.write("\167")
+    term.write("\167 " .. version)
 
     if (Computer.screen == ComputerScreens.SETUP) then
         local hubCompatable = Computer.monitor.width >= 29 and Computer.monitor.height >= 12
