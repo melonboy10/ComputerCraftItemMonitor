@@ -213,7 +213,7 @@ function Computer.drawGUI()
         term.setBackgroundColor(colors.black)
         term.setTextColor(colors.white)
         
-        term.setCursorPos(3, 1)
+        term.setCursorPos(4 + #version, 1)
         term.setBackgroundColor(colors.green)
         term.setTextColor(colors.white)
         term.write("< " .. Computer.info.updateTime .. " >")
