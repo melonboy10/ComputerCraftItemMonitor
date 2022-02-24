@@ -1,4 +1,4 @@
-Util = { }
+Util = { colors = colors.combine(colors.white, colors.orange, colors.magenta, colors.lightBlue, colors.yellow, colors.lime, colors.pink, colors.gray, colors.lightGray, colors.cyan, colors.purple, colors.blue, colors.brown, colors.green, colors.red, colors.black) }
 
 function Util.printTable(t)
     for key, value in pairs(t) do
@@ -70,6 +70,21 @@ end
 
 function Util.firstToUpper(str)
     return (str:gsub("^%l", string.upper))
+end
+
+function Util.copyTableRange(tableD, from, to)
+    local data = {}
+    for i = from, to, 1 do
+        table.insert(data, tableD[i])
+    end
+    return data
+end
+
+function Util.getAtIndex(table, index)
+    for i, value in ipairs(table) do
+        if (index == i) then return value end
+    end
+    return nil
 end
 
 return Util

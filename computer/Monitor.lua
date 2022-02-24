@@ -157,9 +157,10 @@ end
 
 local bars = { [0] = "_", [1] = "-", [2] = "\175"}
 
-function Monitor:drawGraph(x, y, w, h, data, max)
+function Monitor:drawGraph(x, y, w, h, table, max, color)
     self.monitor.setBackgroundColor(colors.black)
-    self.monitor.setTextColor(colors.white)
+    self.monitor.setTextColor(color or colors.white)
+    local data = Util.copyTableRange(table, #table - w, #table)
 
     for i, n in pairs(data) do
         data[i] = n / max * h
@@ -172,8 +173,8 @@ function Monitor:drawGraph(x, y, w, h, data, max)
 
 end
 
-function Monitor:drawNodeSquare(node, x, y)
-    self:lineBorder(x, y, x + 13, y + 7, colors.lightGray)
+function Monitor:drawNodeSquare(node, x, y, color)
+    self:lineBorder(x, y, x + 13, y + 7, color)
     -- self:fill(x, y, x + 13, y + 7, colors.lightGray, " ")
 
     self.monitor.setBackgroundColor(colors.black)
@@ -201,8 +202,8 @@ function Monitor:drawNodeSquare(node, x, y)
     self:writeTrend(node.nodeHistory.trend, x + 1, y + 6, true)
 end
 
-function Monitor:drawNodeLine(node, x, y)
-    self:lineBorder(x, y, x + 52, y + 3, colors.lightGray)
+function Monitor:drawNodeLine(node, x, y, color)
+    self:lineBorder(x, y, x + 52, y + 3, color)
 
     self.monitor.setBackgroundColor(colors.black)
     self.monitor.setTextColor(colors.white)
@@ -216,8 +217,24 @@ function Monitor:drawNodeLine(node, x, y)
     str = str:gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end)
     self.monitor.write(str)
 
-    self:writeQuantity(node.itemCount, node.maxItemCount, x + 21, y + 1)
+    self:writeQuantity(node.itemCount, node.maxItemCount, x + 25, y + 1)
     self:writeTrend(node.nodeHistory.trend, x + 40, y + 1)
+end
+
+function Monitor:drawCollectionLine(collection, x, y, color)
+    self:lineBorder(x, y, x + 52, y + 3, color)
+
+    self.monitor.setBackgroundColor(colors.black)
+    self.monitor.setTextColor(colors.white)
+    self.monitor.setCursorPos(x + 1, y + 1)
+    self.monitor.write(collection.name)
+
+    self.monitor.setTextColor(colors.green)
+    self.monitor.setCursorPos(x + 1, y + 2)
+    self.monitor.write("Nodes: " .. Util.tablelength(collection.nodeIDs))
+
+    -- self:writeQuantity(collection.itemCount, collection.maxItemCount, x + 25, y + 1)
+    -- self:writeTrend(collection.nodeHistory.trend, x + 40, y + 1)
 end
 
 function Monitor:drawVProgressBar(x, y1, y2, progress, max)
@@ -233,6 +250,12 @@ function Monitor:drawVProgressBar(x, y1, y2, progress, max)
             self.monitor.write("|")
         end
     end
+end
+
+-- Function Copies
+
+function Monitor:write(char)
+    self.monitor.write(char)
 end
 
 return Monitor

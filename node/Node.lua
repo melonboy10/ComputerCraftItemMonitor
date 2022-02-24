@@ -122,13 +122,7 @@ function Node:updateScreen()
             Computer.monitor:writeQuantity(self.itemCount, self.maxItemCount, Computer.monitor.width / 2, Computer.monitor.height - 13)
         end
 
-        local width = Computer.monitor.width - 3
-        local data = {}
-        for i = 0, width, 1 do
-            data[i] = self.nodeHistory.quantityHistory[#self.nodeHistory.quantityHistory - width + i]
-        end
-
-        Computer.monitor:drawGraph(2, Computer.monitor.height - 15, width, Computer.monitor.height - 17, data, self.maxItemCount)
+        Computer.monitor:drawGraph(2, Computer.monitor.height - 15, Computer.monitor.width, Computer.monitor.height - 17, self.nodeHistory.quantityHistory, self.maxItemCount)
 
         if (Computer.monitor.height > 10) then
             Computer.monitor:fill(1, Computer.monitor.height - 10, 17, Computer.monitor.height, color)

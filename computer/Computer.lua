@@ -3,6 +3,7 @@ local NodeHistory = require("seedless.node.NodeHistory")
 local Node        = require("seedless.node.Node")
 local Hub         = require("seedless.hub.Hub")
 local Monitor     = require("seedless.computer.Monitor")
+local Collection  = require("seedless.hub.Collection")
 
 local os        = _G.os
 local term      = _G.term
@@ -61,7 +62,8 @@ function Computer.start()
                 local nodeTableThing = textutils.unserialise(x)
                 if (nodeTableThing ~= nil) then
                     Computer.system.nodes[nodeTableThing.nodeID] = nodeTableThing;
-                    Computer.system:update()
+                    Computer.system:updateVariables()
+                    -- Computer.system:update()
                 end
             end
         elseif (event == "terminate") then
@@ -76,10 +78,10 @@ end
 
 function Computer.touchEvent(event, button, x, y)
     if (y == 1) then
-        if (x == 3) then
+        if (x == 4 + #version) then
             Computer.info.updateTime = math.max(Computer.info.updateTime - 1, 1)
             Computer.drawGUI()
-        elseif (x == #("< " .. Computer.info.updateTime .. " >") + 2) then
+        elseif (x == #(version .. " < " .. Computer.info.updateTime .. " >") + 2) then
             Computer.info.updateTime = Computer.info.updateTime + 1
             Computer.drawGUI()
         end
@@ -128,6 +130,11 @@ function Computer.setUpHub()
         Computer.system:save()
     else
         hubTable = textutils.unserialise(hubTable)
+        local collectionsList = { }
+        for i, collection in ipairs(hubTable.collections) do
+            table.insert(collectionsList, Collection(collection.name, collection.nodeIDs, collection.nodeConnections))
+        end
+
         Computer.system = Hub(hubTable.name, hubTable.collections)
     end
 
