@@ -5,6 +5,7 @@ local FileManager = require('seedless.computer.FileManager')
 local os        = _G.os
 
 local Node = class()
+local monitor
 
 local drawersBlacklist = { "storagedrawers:compacting_drawers_3", "storagedrawers:controller", "storagedrawers:controller_slave" }
 local upgradeNumber = {
@@ -27,6 +28,8 @@ function Node:init(name, id, quantityHistory, trend)
     self.blockID = ""
 
     self.nodeHistory = NodeHistory(self, quantityHistory, trend)
+    
+    monitor = Computer.monitor
 end
 
 function Node:readBlockData()
@@ -101,9 +104,9 @@ function Node:touchEvent(event, button, x, y)
 end
 
 function Node:updateScreen()
-    if (Computer.monitor ~= nil) then
+    if (monitor ~= nil) then
 
-        Computer.monitor:clear()
+        monitor:clear()
         local color = colors.black
         if (self.nodeHistory.trend < 0 or self.itemCount == 0) then
             color = colors.red
@@ -113,19 +116,19 @@ function Node:updateScreen()
             color = colors.yellow
         end
         
-        Computer.monitor:border(color)
+        monitor:border(color)
 
-        if (Computer.monitor.width > 16) then
-            Computer.monitor:writeQuantity(self.itemCount, self.maxItemCount, Computer.monitor.width / 4, Computer.monitor.height - 13)
-            Computer.monitor:writeTrend(self.nodeHistory.trend / Computer.info.updateTime, Computer.monitor.width / 4 * 3, Computer.monitor.height - 13)
+        if (monitor.width > 16) then
+            monitor:writeQuantity(self.itemCount, self.maxItemCount, monitor.width / 4, monitor.height - 13)
+            monitor:writeTrend(self.nodeHistory.trend / Computer.info.updateTime, monitor.width / 4 * 3, monitor.height - 13)
         else
-            Computer.monitor:writeQuantity(self.itemCount, self.maxItemCount, Computer.monitor.width / 2, Computer.monitor.height - 13)
+            monitor:writeQuantity(self.itemCount, self.maxItemCount, monitor.width / 2, monitor.height - 13)
         end
 
-        Computer.monitor:drawGraph(2, Computer.monitor.height - 15, Computer.monitor.width, Computer.monitor.height - 17, self.nodeHistory.quantityHistory, self.maxItemCount)
+        monitor:drawGraph(2, monitor.height - 15, monitor.width, monitor.height - 17, self.nodeHistory.quantityHistory, self.maxItemCount)
 
-        if (Computer.monitor.height > 10) then
-            Computer.monitor:fill(1, Computer.monitor.height - 10, 17, Computer.monitor.height, color)
+        if (monitor.height > 10) then
+            monitor:fill(1, monitor.height - 10, 17, monitor.height, color)
         end
     end
 end

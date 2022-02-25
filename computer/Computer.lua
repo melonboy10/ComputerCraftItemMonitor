@@ -9,7 +9,7 @@ local os        = _G.os
 local term      = _G.term
 local textutils = _G.textutils
 
-local version = "0.4"
+local version = "0.5"
 Computer = { timer = 0 }
 ComputerType = { HUB = "hub", NODE = "node"}
 ComputerScreens = { SETUP = "setup", STATS = "stats" }
@@ -124,6 +124,7 @@ function Computer.setUpNode()
 end
 
 function Computer.setUpHub()
+    if (not (Computer.monitor.width >= 57 and Computer.monitor.height >= 24)) then error("Hub screen is not big enough (3x2)") end
     local hubTable = FileManager.read("Hub") -- This will read the hub data (holds collections(seperate collections for each hub) and sorting info)
     if (hubTable == nil) then
         Computer.system = Hub("New Hub", { })
@@ -156,7 +157,7 @@ function Computer.drawGUI()
     term.write("\167 " .. version)
 
     if (Computer.screen == ComputerScreens.SETUP) then
-        local hubCompatable = Computer.monitor.width >= 29 and Computer.monitor.height >= 12
+        local hubCompatable = Computer.monitor.width >= 57 and Computer.monitor.height >= 24
 
         
         term.setBackgroundColor(colors.black)

@@ -203,7 +203,7 @@ function Monitor:drawNodeSquare(node, x, y, color)
 end
 
 function Monitor:drawNodeLine(node, x, y, color)
-    self:lineBorder(x, y, x + 52, y + 3, color)
+    self:lineBorder(x, y, self.width - 2, y + 3, color)
 
     self.monitor.setBackgroundColor(colors.black)
     self.monitor.setTextColor(colors.white)
@@ -217,12 +217,12 @@ function Monitor:drawNodeLine(node, x, y, color)
     str = str:gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end)
     self.monitor.write(str)
 
-    self:writeQuantity(node.itemCount, node.maxItemCount, x + 25, y + 1)
-    self:writeTrend(node.nodeHistory.trend, x + 40, y + 1)
+    self:writeQuantity(node.itemCount, node.maxItemCount, self.width / 2, y + 1)
+    self:writeTrend(node.nodeHistory.trend, self.width / 4 * 3, y + 1)
 end
 
 function Monitor:drawCollectionLine(collection, x, y, color)
-    self:lineBorder(x, y, x + 52, y + 3, color)
+    self:lineBorder(x, y, self.width - 2, y + 3, color)
 
     self.monitor.setBackgroundColor(colors.black)
     self.monitor.setTextColor(colors.white)
@@ -257,5 +257,24 @@ end
 function Monitor:write(char)
     self.monitor.write(char)
 end
+
+function Monitor:setTextColor(color)
+    self.monitor.setTextColor(color)
+end
+
+function Monitor:setBackgroundColor(color)
+    self.monitor.setBackgroundColor(color)
+end
+
+function Monitor:setCursorPos(x, y)
+    self.monitor.setCursorPos(x, y)
+end
+
+function Monitor:setColors(textColor, backgroundColor)
+    self.monitor.setTextColor(textColor)
+    self.monitor.setBackgroundColor(backgroundColor)
+end
+
+
 
 return Monitor
