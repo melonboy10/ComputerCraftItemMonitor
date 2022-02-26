@@ -23,9 +23,9 @@ function Node:init(name, id, quantityHistory, trend)
     self.itemCount = 0
     self.maxItemCount = 0
 
-    self.inventory = { }
-    self.inventoryType = ""
-    self.blockID = ""
+    self.inventory = nil
+    self.inventoryType = nil
+    self.blockID = nil
 
     self.nodeHistory = NodeHistory(self, quantityHistory, trend)
     
@@ -34,13 +34,20 @@ end
 
 function Node:readBlockData()
     
-    self.inventoryType, tmp = peripheral.getType("top")
-    if (self.inventoryType == nil) then error("No inventory found [`blockReader`,`inventory`,`fluid_inventory`]") end
-    if (tmp ~= nil) then
-        self.blockID = self.inventoryType
-        self.inventoryType = tmp
+    if (self.inventoryType == nil or self.inventorySide == nil) then
+        for i, side in ipairs(peripheral.getNames()) do
+            local per = peripheral.wrap(side)
+            local n, bType = peripheral.getType(per)
+            if (bType == "blockReader" or bType == "inventory" or bType == "fluid_inventory") then
+                self.inventoryType = bType
+                self.inventory = per
+                break
+            end
+        end
+        if (self.inventory == nil) then error("No valid block types! Only found " .. self.inventoryType) end
+    else
+        self.inventory = peripheral.wrap(self.inventorySide)
     end
-    self.inventory = peripheral.wrap("top")
 
     if (self.inventoryType == "blockReader") then
         self.blockID = self.inventory.getBlockName()
@@ -87,7 +94,7 @@ function Node:readBlockData()
     elseif (self.inventoryType == "fluid_inventory") then
 
     else
-        error("No valid block types on top! Only found " .. self.inventoryType)
+        error("No valid block types! Only found " .. self.inventoryType)
     end
 
     
@@ -118,16 +125,16 @@ function Node:updateScreen()
         
         monitor:border(color)
 
-        if (monitor.width > 16) then
-            monitor:writeQuantity(self.itemCount, self.maxItemCount, monitor.width / 4, monitor.height - 13)
-            monitor:writeTrend(self.nodeHistory.trend / Computer.info.updateTime, monitor.width / 4 * 3, monitor.height - 13)
-        else
+        if (monitor.height <= 10) then
+            monitor:drawGraph(1, monitor.height, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
+        elseif (monitor.width <= 15) then
+            monitor:drawGraph(1, monitor.height - 14, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
             monitor:writeQuantity(self.itemCount, self.maxItemCount, monitor.width / 2, monitor.height - 13)
-        end
-
-        monitor:drawGraph(2, monitor.height - 15, monitor.width, monitor.height - 17, self.nodeHistory.quantityHistory, self.maxItemCount)
-
-        if (monitor.height > 10) then
+            monitor:fill(1, monitor.height - 10, 17, monitor.height, color)
+        else
+            monitor:drawGraph(1, monitor.height - 10, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
+            monitor:writeQuantity(self.itemCount, self.maxItemCount, 27, monitor.height - 8)
+            monitor:writeTrend(self.nodeHistory.trend / Computer.info.updateTime, 27, monitor.height - 5)
             monitor:fill(1, monitor.height - 10, 17, monitor.height, color)
         end
     end

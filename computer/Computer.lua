@@ -9,7 +9,7 @@ local os        = _G.os
 local term      = _G.term
 local textutils = _G.textutils
 
-local version = "0.5"
+local version = "0.6"
 Computer = { timer = 0 }
 ComputerType = { HUB = "hub", NODE = "node"}
 ComputerScreens = { SETUP = "setup", STATS = "stats" }

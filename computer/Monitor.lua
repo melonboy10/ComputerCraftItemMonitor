@@ -163,11 +163,14 @@ function Monitor:drawGraph(x, y, w, h, table, max, color)
     local data = Util.copyTableRange(table, #table - w, #table)
 
     for i, n in pairs(data) do
-        data[i] = n / max * h
-        self.monitor.setCursorPos(x + i, y - data[i])
-        local char = data[i] * 3 % 3
-        if (n == max) then self.monitor.write("*") else
-        self.monitor.write(bars[math.floor(char)]) end
+        if (n ~= nil) then
+            print (max)
+            data[i] = n / max * h
+            self.monitor.setCursorPos(x + i, y - data[i])
+            local char = data[i] * 3 % 3
+            if (n == max) then self.monitor.write("*") else
+            self.monitor.write(bars[math.floor(char)]) end
+        end
     end
     -- print(textutils.serialise(data))
 
