@@ -11,7 +11,10 @@ function NodeHistory:init(node, history, trend)
 end
 
 function NodeHistory:update()
-    self.quantityHistory[Util.tablelength(self.quantityHistory)] = self.node.itemCount
+    -- self.quantityHistory[Util.tablelength(self.quantityHistory)] = self.node.itemCount
+    -- self.quantityHistory
+    if (Util.tableLength(self.quantityHistory) > 60) then table.remove(self.quantityHistory, 0); end
+    table.insert(self.quantityHistory, self.node.itemCount);
 
     self.trend = self.quantityHistory[#self.quantityHistory] - self.quantityHistory[#self.quantityHistory - 1]
 end
