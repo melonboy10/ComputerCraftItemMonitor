@@ -1,5 +1,6 @@
-# Seedless Item Monitor
-Seedless Item Monitor is an item monitoring system (duh) made with ComputerCraft for 1.16.5
+# Computer Craft Item Monitor
+Computer Craft Item Monitor is an item monitoring system (duh) made with ComputerCraft for 1.16.5
+Now with 100% less seeds!
 
 ## Setup
 Copy the pastbin command below and run it to start the installer.
