@@ -1,5 +1,5 @@
-# Computer Craft Item Monitor
-Computer Craft Item Monitor is an item monitoring system (duh) made with ComputerCraft for 1.16.5
+# ComputerCraft Item Monitor
+ComputerCraft Item Monitor is an item monitoring system (duh) made with ComputerCraft for 1.16.5
 Now with 100% less seeds!
 
 ## Setup
