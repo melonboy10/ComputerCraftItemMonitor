@@ -35,15 +35,22 @@ end
 function Node:readBlockData()
     
     if (self.inventoryType == nil or self.inventorySide == nil) then
-        for i, side in ipairs(peripheral.getNames()) do
-            local per = peripheral.wrap(side)
-            local n, bType = peripheral.getType(per)
-            if (bType == "blockReader" or bType == "inventory" or bType == "fluid_storage") then
-                self.inventoryType = bType
-                self.inventory = per
-                break
-            end
+        -- for i, side in ipairs(peripheral.getNames()) do
+        --     local per = peripheral.wrap(side)
+        --     local n, bType = peripheral.getType(per)
+        --     print(bType)
+        --     if (bType == "blockReader" or bType == "inventory" or bType == "fluid_storage") then
+        --         self.inventoryType = bType
+        --         self.inventory = per
+        --         break
+        --     end
+        -- end
+        local bType = peripheral.getType("top")
+        if (bType == "blockReader" or bType == "inventory" or bType == "fluid_storage") then
+            self.inventoryType = bType
+            self.inventory = peripheral.wrap("top")
         end
+        
         if (self.inventory == nil) then error("No valid block types! Only found " .. self.inventoryType) end
     else
         self.inventory = peripheral.wrap(self.inventorySide)
