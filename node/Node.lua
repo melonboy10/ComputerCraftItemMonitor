@@ -38,7 +38,7 @@ function Node:readBlockData()
         for i, side in ipairs(peripheral.getNames()) do
             local per = peripheral.wrap(side)
             local n, bType = peripheral.getType(per)
-            if (bType == "blockReader" or bType == "inventory" or bType == "fluid_inventory") then
+            if (bType == "blockReader" or bType == "inventory" or bType == "fluid_storage") then
                 self.inventoryType = bType
                 self.inventory = per
                 break
@@ -91,8 +91,16 @@ function Node:readBlockData()
                 self.itemCount = self.itemCount + item.count
             end
         end
-    elseif (self.inventoryType == "fluid_inventory") then
+    elseif (self.inventoryType == "fluid_storage") then
+        local tank = self.inventory.tanks()[1]
+        if (tank == nil and self.itemID == nil) then error("No fluid in tank") end
 
+        self.itemCount = 0
+        if (tank ~= nil) then
+            self.itemID = tank.name
+            self.maxItemCount = math.max(tank.amount, self.maxItemCount)
+            self.itemCount = tank.amount
+        end
     else
         error("No valid block types! Only found " .. self.inventoryType)
     end
@@ -126,13 +134,13 @@ function Node:updateScreen()
         monitor:border(color)
 
         if (monitor.height <= 10) then
-            monitor:drawGraph(1, monitor.height, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
+            monitor:drawGraph(1, monitor.height - 1, monitor.width - 3, monitor.height - 3, self.nodeHistory.quantityHistory, self.maxItemCount)
         elseif (monitor.width <= 15) then
-            monitor:drawGraph(1, monitor.height - 14, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
+            monitor:drawGraph(1, monitor.height - 14, monitor.width - 3, monitor.height - 16, self.nodeHistory.quantityHistory, self.maxItemCount)
             monitor:writeQuantity(self.itemCount, self.maxItemCount, monitor.width / 2, monitor.height - 13)
             monitor:fill(1, monitor.height - 10, 17, monitor.height, color)
         else
-            monitor:drawGraph(1, monitor.height - 10, monitor.width - 3, monitor.height - 2, self.nodeHistory.quantityHistory, self.maxItemCount)
+            monitor:drawGraph(1, monitor.height - 11, monitor.width - 3, monitor.height - 13, self.nodeHistory.quantityHistory, self.maxItemCount)
             monitor:writeQuantity(self.itemCount, self.maxItemCount, 27, monitor.height - 8)
             monitor:writeTrend(self.nodeHistory.trend / Computer.info.updateTime, 27, monitor.height - 5)
             monitor:fill(1, monitor.height - 10, 17, monitor.height, color)

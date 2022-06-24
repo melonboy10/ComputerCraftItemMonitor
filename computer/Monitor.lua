@@ -122,10 +122,10 @@ function Monitor:writeQuantity(quantity, maxQuantity, x, y, inline)
     self.monitor.write(bottomNumber)
     
     -- self.monitor.setCursorPos(1, 10)
-    -- self.monitor.write("\140\159 \140\159 \159\128\159 \159\140 \159\140\140 \140\140\159 \159\140\159 \159\140\159")
+    -- self.monitor.write("\140\159?\140\159?\159\128\159?\159\140?\159\140\140?\140\140\159?\159\140\159?\159\140\159")
     -- self.monitor.setCursorPos(1, 11)
-    -- self.monitor.write("\128\159 \159\140 \140\140\159 \140\159 \159\140\159 \128\128\159 \140\140\159 \159\140\159")
-    -- -- self.monitor.write("▄█ ▀█ █░█ █▀ █▄▄ ▀▀█ █▀█ █▀█\n░█ █▄ ▀▀█ ▄█ █▄█ ░░█ ▀▀█ █▄█\n")
+    -- self.monitor.write("\128\159?\159\140?\140\140\159?\140\159?\159\140\159?\128\128\159?\140\140\159?\159\140\159")
+    -- -- self.monitor.write("????????????????????????????\n????????????????????????????\n")
 
 end
 
@@ -164,12 +164,11 @@ function Monitor:drawGraph(x, y, w, h, table, max, color)
 
     for i, n in pairs(data) do
         if (n ~= nil) then
-            print (max)
             data[i] = n / max * h
             self.monitor.setCursorPos(x + i, y - data[i])
             local char = data[i] * 3 % 3
-            if (n == max) then self.monitor.write("*") else
-            self.monitor.write(bars[math.floor(char)]) end
+            if (n >= max) then self.monitor.write("*") 
+            else self.monitor.write(bars[math.floor(char)]) end
         end
     end
     -- print(textutils.serialise(data))

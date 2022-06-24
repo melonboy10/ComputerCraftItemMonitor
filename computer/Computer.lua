@@ -63,6 +63,9 @@ function Computer.start()
                 if (nodeTableThing ~= nil) then
                     Computer.system.nodes[nodeTableThing.nodeID] = nodeTableThing;
                     Computer.system:updateVariables()
+                    if (Computer.system.currentNode == nodeTableThing.nodeID) then
+                        Computer.system:updateScreen()
+                    end
                     -- Computer.system:update()
                 end
             end
@@ -210,9 +213,9 @@ function Computer.drawGUI()
 --".-. .-. .-. .  .   .  . .-. . . .-. .-. .-. .-. "
 --" |   |  |-  |\/|   |\/| | | |\|  |   |  | | |(  "
 --"`-'  '  `-' '  `   '  ` `-' ' ` `-'  '  `-' ' ' "
--- "╦┌┬┐┌─┐┌┬┐  ╔╦╗┌─┐┌┐┌┬┌┬┐┌─┐┬─┐"
--- "║ │ ├┤ │││  ║║║│ │││││ │ │ │├┬┘"
--- "╩ ┴ └─┘┴ ┴  ╩ ╩└─┘┘└┘┴ ┴ └─┘┴└─"
+-- "??????????  ???????????????????"
+-- "? ? ?? ???  ???? ????? ? ? ????"
+-- "? ? ???? ?  ? ???????? ? ??????"
 --   ___ _               __  __          _ _
 --  |_ _| |_ ___ _ __   |  \/  |___ _ _ (_) |_ ___ _ _
 --   | ||  _/ -_) '  \  | |\/| / _ \ ' \| |  _/ _ \ '_|
